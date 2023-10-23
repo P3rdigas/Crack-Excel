@@ -1,0 +1,7 @@
+# Ignores python cache
+__pycache__/
+
+# Ignores input, temporary and output files
+*.zip
+*.xlsm
+*.xlxs

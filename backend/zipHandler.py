@@ -1,24 +1,28 @@
 import io
 import zipfile
 
-CONST_ZIP_EXTENSION = ".zip"
 CONST_DATA_ZIP = "data.zip"
+CONST_ZIP_EXTENSION = ".zip"
+
+CONST_XL_FOLDER = "xl/"
+CONST_WORKSHEETS_FOLDER = "worksheets/"
+
+CONST_WORKBOOK_FILE = "workbook.xml"
+
+CONST_WORKBOOK_PROTECTION = "<fileSharing"
 
 # Converts an Excel file to a zip file TODO: in memory
 # Args:
 #   excel_file: The filename with the extension of the Excel file.
-#   excel_name: The name of the Excel file
 # Returns:
 #   TODO: A ZipFile object containing the Excel file.
-def convert_excel_to_zip(excel_file, excel_name):
+def convert_excel_to_zip(excel_file):
     # Reads the bytes of the excel file
     with open(excel_file, "rb") as f:
         excel_data = f.read()
 
     # Create an in-memory buffer for the creating the first zip
     excel_to_zip_buffer = io.BytesIO()
-    
-    zip_file_name = excel_name + CONST_ZIP_EXTENSION
 
     # Creates the zip file that will contain the Excel data
     with zipfile.ZipFile(excel_to_zip_buffer, "w") as zf:
@@ -31,6 +35,9 @@ def convert_excel_to_zip(excel_file, excel_name):
             # Extract the data zip file
             data_zip = converted_zip.read(CONST_DATA_ZIP)
 
+            # Create a new in-memory buffer for the new zip file
+            zip_file_buffer = io.BytesIO()
+
             # Open the data zip file from memory
             with zipfile.ZipFile(io.BytesIO(data_zip), 'r') as data:
                 # Extract the content from the inner zip file
@@ -41,7 +48,7 @@ def convert_excel_to_zip(excel_file, excel_name):
 
 
             # Create a new ZipFile
-            with zipfile.ZipFile(zip_file_name, "w") as new_zip_file:
+            with zipfile.ZipFile(zip_file_buffer, "w") as new_zip_file:
             
                 # Copy the files you want to keep to the new ZipFile
                 for item in converted_zip.infolist():
@@ -51,17 +58,18 @@ def convert_excel_to_zip(excel_file, excel_name):
 
     excel_to_zip_buffer.close()
 
+    return zip_file_buffer
 
+def crack_excel(zip_file):
+    with zipfile.ZipFile(zip_file, "r") as zf:
+        workbook_file = CONST_XL_FOLDER + CONST_WORKBOOK_FILE
 
+        if workbook_file in zf.namelist():
+            with zf.open(workbook_file) as workbook:
+                if CONST_WORKBOOK_PROTECTION in workbook:
+                    print("O ficheiro está protegido")
+                else:
+                    print("O ficheiro não está protegido")
 
-# #
-# # Open the zip file 
-# def open_zip_file():
-#     print("ADeus")
-
-# #
-# # Function that converts the excel file to a zip and creates the zip file 
-# def convert_to_zip(excel_name, excel_file_path, source_folder_path):
-#     zip_file_name = excel_name + CONST_ZIP_EXTENSION
-#     zip_file_path = os.path.join(source_folder_path, zip_file_name)
-#     os.rename(excel_file_path, zip_file_path)
+        worksheets_folder = CONST_XL_FOLDER + CONST_WORKSHEETS_FOLDER
+        

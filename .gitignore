@@ -4,4 +4,7 @@ __pycache__/
 # Ignores input, temporary and output files
 *.zip
 *.xlsm
-*.xlxs
+*.xlsx
+
+# Ignores folder with files for comparations
+comparations

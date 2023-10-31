@@ -1,13 +1,14 @@
 import os
-from backend.zipHandler import convert_excel_to_zip, crack_excel
+from backend.zipHandler import convert_excel_to_zip, crack_excel, create_unprotected_file
 
 # Class for the extensions supported
 class ExcelExtensions:
     CONST_XLSM_EXTENSION = ".xlsm"
+    CONST_XLSX_EXTENSION = ".xlsx"
 
 # Get information of the given excel file
 source_folder_path = os.getcwd()
-excel_file = os.path.basename("input.xlsm") # TODO: Change for soure_folder_path
+excel_file = os.path.basename("Livro1.xlsx") # TODO: Change for soure_folder_path
 excel_name, excel_extension = os.path.splitext(excel_file)
 
 #
@@ -20,5 +21,11 @@ match excel_extension:
         print("You are trying to crack a {} excel file".format(excel_extension))
         zip_file = convert_excel_to_zip(excel_file)
         cracked_zip_file = crack_excel(zip_file)
+        create_unprotected_file(cracked_zip_file, excel_name, excel_extension)
+    case ExcelExtensions.CONST_XLSX_EXTENSION:
+        print("You are trying to crack a {} excel file".format(excel_extension))
+        zip_file = convert_excel_to_zip(excel_file)
+        cracked_zip_file = crack_excel(zip_file)
+        create_unprotected_file(cracked_zip_file, excel_name, excel_extension)
     case _:
         print("This file is not supported yet. Files supported .xlxs and .xlsm")

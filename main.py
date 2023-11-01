@@ -1,4 +1,5 @@
 import os
+import sys
 from backend.zipHandler import convert_excel_to_zip, crack_excel, create_unprotected_file
 
 # Class for the extensions supported
@@ -6,9 +7,14 @@ class ExcelExtensions:
     CONST_XLSM_EXTENSION = ".xlsm"
     CONST_XLSX_EXTENSION = ".xlsx"
 
+if len(sys.argv) != 2:
+    print("Usage: py main.py filename.extension")
+    sys.exit(1)
+
+excel_file = sys.argv[1]
+
 # Get information of the given excel file
 source_folder_path = os.getcwd()
-excel_file = os.path.basename("Livro1.xlsx") # TODO: Change for soure_folder_path
 excel_name, excel_extension = os.path.splitext(excel_file)
 
 #

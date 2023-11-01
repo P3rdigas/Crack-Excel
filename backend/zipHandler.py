@@ -2,7 +2,6 @@ from io import BytesIO
 from lxml import etree
 from zipfile import ZipFile
 
-
 CONST_DATA_ZIP = "data.zip"
 CONST_ZIP_EXTENSION = ".zip"
 
@@ -12,6 +11,7 @@ CONST_WORKSHEETS_FOLDER = "worksheets/"
 CONST_WORKBOOK_FILE = "workbook.xml"
 
 CONST_WORKBOOK_PROTECTION = "workbookProtection"
+CONST_READONLY_PROTECTION = "fileSharing"
 
 CONST_UTF = "utf-8"
 
@@ -56,7 +56,7 @@ def convert_excel_to_zip(excel_file):
 
     return zip_file_buffer
 
-def remove_workbook_protection(xml_content, tag):
+def remove_protections(xml_content, tag):
     tree = etree.parse(BytesIO(xml_content))
     root = tree.getroot()
     
@@ -71,7 +71,7 @@ def remove_workbook_protection(xml_content, tag):
         print("{} doesn't exists in the file".format(tag))
 
     # Serialize the modified XML content to a string
-    modified_xml_content = etree.tostring(root, encoding=CONST_UTF).decode(CONST_UTF)
+    modified_xml_content = etree.tostring(root, encoding=CONST_UTF)
 
     return modified_xml_content
    
@@ -84,7 +84,8 @@ def crack_excel(zip_file):
             with zf.open(workbook_file, "r") as workbook:
                 workbook_content_string = workbook.read()       
 
-            modified_workbook_content = remove_workbook_protection(workbook_content_string, CONST_WORKBOOK_PROTECTION)
+            modified_workbook_content = remove_protections(workbook_content_string, CONST_WORKBOOK_PROTECTION)
+            modified_workbook_content = remove_protections(modified_workbook_content, CONST_READONLY_PROTECTION)
 
             cracked_zip_file = BytesIO()
 
@@ -95,7 +96,9 @@ def crack_excel(zip_file):
                         czf.writestr(item.filename, modified_workbook_content)
                     else:
                         content = zf.read(item.filename)
-                        czf.writestr(item.filename, content) 
+                        czf.writestr(item.filename, content)
+        
+
 
     zip_file.close()
 

@@ -4,13 +4,16 @@ from zipfile import ZipFile
 
 CONST_DATA_ZIP = "data.zip"
 CONST_ZIP_EXTENSION = ".zip"
+CONST_XML_EXTENSION = ".xml"
 
 CONST_XL_FOLDER = "xl/"
 CONST_WORKSHEETS_FOLDER = "worksheets/"
 
+CONST_SHEET_FILE = "sheet"
 CONST_WORKBOOK_FILE = "workbook.xml"
 
 CONST_READONLY_PROTECTION = "fileSharing"
+CONST_SHEET_PROTECTION = "sheetProtection"
 CONST_WORKBOOK_PROTECTION = "workbookProtection"
 
 CONST_UTF = "utf-8"
@@ -36,7 +39,7 @@ def convert_excel_to_zip(excel_file):
 
     return zip_file
 
-def remove_protections(xml_content, tag):
+def remove_protection(xml_content, tag):
     tree = etree.parse(BytesIO(xml_content))
     root = tree.getroot()
     
@@ -59,27 +62,36 @@ def crack_excel(zip_file):
     with ZipFile(zip_file, "r") as zf:
         # Removes the workbook protections
         workbook_file = CONST_XL_FOLDER + CONST_WORKBOOK_FILE
+        sheets_files = CONST_XL_FOLDER + CONST_WORKSHEETS_FOLDER + CONST_SHEET_FILE
 
-        if workbook_file in zf.namelist():
-            with zf.open(workbook_file, "r") as workbook:
-                workbook_content_string = workbook.read()       
+        cracked_zip_file = BytesIO()
 
-            modified_workbook_content = remove_protections(workbook_content_string, CONST_WORKBOOK_PROTECTION)
-            modified_workbook_content = remove_protections(modified_workbook_content, CONST_READONLY_PROTECTION)
+        modified_file_content = None
 
-            cracked_zip_file = BytesIO()
+        for file in zf.namelist():
+            if file == workbook_file:
+                with zf.open(file, "r") as workbook:
+                    workbook_content = workbook.read()       
+
+                modified_file_content = remove_protection(workbook_content, CONST_WORKBOOK_PROTECTION)
+                modified_file_content = remove_protection(modified_file_content, CONST_READONLY_PROTECTION)
+
+            elif file.startswith(sheets_files) and file.endswith(CONST_XML_EXTENSION) and file != sheets_files:
+                with zf.open(file, "r") as sheet:
+                    sheet_content = sheet.read()
+                
+                modified_file_content = remove_protection(sheet_content, CONST_SHEET_PROTECTION)
 
             # Save the modified content to a new zip file in memory
-            with ZipFile(cracked_zip_file, "w") as czf:
-                for item in zf.infolist():
-                    if item.filename == workbook_file:
-                        czf.writestr(item.filename, modified_workbook_content)
-                    else:
-                        content = zf.read(item.filename)
-                        czf.writestr(item.filename, content)
-        
-        # TODO: Unprotect sheets
-    
+            with ZipFile(cracked_zip_file, "a") as czf:
+                if modified_file_content is None:
+                    content = zf.read(file)
+                    czf.writestr(file, content)
+                else:
+                    czf.writestr(file, modified_file_content)
+
+            modified_file_content = None
+
     zip_file.close()
 
     return cracked_zip_file

@@ -1,6 +1,6 @@
 # Crack-Excel
 # Description
-This is a script that unlocks excel files. It allows the users that forgot their passwords to quickly and easily unlock sheets, workbooks and read-only for their excel files. This script will not unlock excel files that have a password to open the file. Keep in mind that the purpose of this script is to unlock files owned by the user, who is responsible for the use of the script and the purposes it will take. The authors of the script are not responsible for any misuse of the script.
+This is a script that unlocks excel files. It allows the users that forgot their passwords to quickly and easily unlock sheets, workbooks and read-only for their excel files. At the moment this script support .xlsx and xlsm files. This script will not unlock excel files that have a password to open the file. Keep in mind that the purpose of this script is to unlock files owned by the user, who is responsible for the use of the script and the purposes it will take. The authors of the script are not responsible for any misuse of the script.
 
 # How to run
 1. Download the script

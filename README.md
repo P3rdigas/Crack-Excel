@@ -7,3 +7,6 @@ This is a script that unlocks excel files. It allows the users that forgot their
 2. Copy the excel file to crack to the root folder of the script
 3. Open the terminal in the root folder and run the command: ```bash py main.py "excel_file"``` ("excel_file" must be the file you want to crack)
 4. The script will create an unlocked excel file "excel_filename - CRACKED.extension" in the root folder
+
+# License
+[MIT License](LICENSE)

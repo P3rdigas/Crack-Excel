@@ -4,9 +4,9 @@ This is a script that unlocks excel files. It allows the users that forgot their
 
 # How to run
 1. Download the script
-2. In the root folder run the following command in the terminal to install all the packages: ```bash pip install -r requirements.txt```
+2. In the root folder run the following command in the terminal to install all the packages: ```pip install -r requirements.txt```
 3. Copy the excel file to crack to the root folder of the script
-4. Open the terminal in the root folder and run the command: ```bash py main.py "excel_file"``` ("excel_file" must be the file you want to crack)
+4. Open the terminal in the root folder and run the command: ```py main.py "excel_file"``` ("excel_file" must be the file you want to crack)
 5. The script will create an unlocked excel file "excel_filename - CRACKED.extension" in the root folder
 
 # License

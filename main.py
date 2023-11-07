@@ -1,6 +1,6 @@
 import os
 import sys
-from backend.zipHandler import convert_excel_to_zip, crack_excel, create_unprotected_file
+from utils import convert_excel_to_zip, crack_excel, create_unprotected_file
 
 # Class for the extensions supported
 class ExcelExtensions:

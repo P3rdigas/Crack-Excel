@@ -8,3 +8,6 @@ __pycache__/
 
 # Ignores folder with files for comparations
 comparations
+
+# Ignores photoshop files
+*.psd

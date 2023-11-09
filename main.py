@@ -1,11 +1,32 @@
 import os
 import sys
+import customtkinter as ctk
 from utils import convert_excel_to_zip, crack_excel, create_unprotected_file
 
 # Class for the extensions supported
 class ExcelExtensions:
     CONST_XLSM_EXTENSION = ".xlsm"
     CONST_XLSX_EXTENSION = ".xlsx"
+
+window = ctk.CTk()
+
+window.title("Crack Excel")
+window.iconbitmap('assets/cracked_excel_logo_128x128.ico')
+window.geometry("800x600")
+window.resizable(width=False, height=False)
+
+# TODO: Button to change appearance mode (começar em system, deixar mudar para dark ou light)
+# window._set_appearance_mode("dark")
+
+
+window.mainloop()
+
+
+
+
+
+
+
 
 if len(sys.argv) != 2:
     print("Usage: py main.py filename.extension")

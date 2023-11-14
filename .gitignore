@@ -11,3 +11,5 @@ comparations
 
 # Ignores photoshop files
 *.psd
+
+example.py

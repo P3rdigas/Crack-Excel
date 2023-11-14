@@ -1,3 +1,5 @@
+import tempfile
+#import xlwings as xw
 from io import BytesIO
 from lxml import etree
 from zipfile import ZipFile
@@ -10,6 +12,7 @@ CONST_XL_FOLDER = "xl/"
 CONST_WORKSHEETS_FOLDER = "worksheets/"
 
 CONST_SHEET_FILE = "sheet"
+CONST_VBA_FILE = "vbaProject.bin"
 CONST_WORKBOOK_FILE = "workbook.xml"
 
 CONST_READONLY_PROTECTION = "fileSharing"
@@ -61,6 +64,7 @@ def remove_protection(xml_content, tag):
 def crack_excel(zip_file):
     with ZipFile(zip_file, "r") as zf:
         # Removes the workbook protections
+        vba_file = CONST_XL_FOLDER + CONST_VBA_FILE
         workbook_file = CONST_XL_FOLDER + CONST_WORKBOOK_FILE
         sheets_files = CONST_XL_FOLDER + CONST_WORKSHEETS_FOLDER + CONST_SHEET_FILE
 
@@ -69,7 +73,14 @@ def crack_excel(zip_file):
         modified_file_content = None
 
         for file in zf.namelist():
-            if file == workbook_file:
+            if file == vba_file:
+                with zf.open(file, "r") as vba:
+                    vba_content = vba.read()
+                
+                modified_file_content = vba_content.decode("utf-8").replace("DPB", "DPX").encode("utf-8")
+                #print(modified_file_content)
+
+            elif file == workbook_file:
                 with zf.open(file, "r") as workbook:
                     workbook_content = workbook.read()       
 
@@ -95,6 +106,11 @@ def crack_excel(zip_file):
     zip_file.close()
 
     return cracked_zip_file
+
+def change_vba(zip_file):
+    # Create a temporary file and write the VBA bytes to it
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsm") as temp_file:
+        temp_file.write(zip_file.getvalue())
 
 def create_unprotected_file(zip_file, filename, extension):
     file_path = filename + " - CRACKED" + extension

@@ -11,13 +11,17 @@ class ExcelExtensions:
     CONST_XLSM_EXTENSION = ".xlsm"
     CONST_XLSX_EXTENSION = ".xlsx"
 
-# Python colors: https://matplotlib.org/stable/gallery/color/named_colors.html
-CONST_MENUBAR_BACKGROUND_COLOR_LIGHT = "grey75"
+# Python colors: https://matplotlib.org/stable/gallery/color/named_colors.html or https://www.discogcodingacademy.com/turtle-colours
+CONST_MENUBAR_BACKGROUND_COLOR_LIGHT = "white"
 CONST_MENUBAR_BACKGROUND_COLOR_DARK = "black"
-CONST_MENUBAR_TEXT_COLOR_LIGHT = "black"
-CONST_MENUBAR_TEXT_COLOR_DARK = "white"
-CONST_MENUBAR_HOVER_COLOR_LIGHT = "black"
-CONST_MENUBAR_HOVER_COLOR_DARK = "grey25"
+
+CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT = "white"
+CONST_DROPDOWN_BACKGROUND_COLOR_DARK = "grey20"
+
+CONST_TEXT_COLOR_LIGHT = "black"
+CONST_TEXT_COLOR_DARK = "white"
+CONST_HOVER_COLOR_LIGHT = "light gray"
+CONST_HOVER_COLOR_DARK = "grey25"
 
 CONST_GITHUB_LOGO_LIGHT_PATH = r"assets/icons/github-mark.png"
 CONST_GITHUB_LOGO_DARK_PATH = r"assets/icons/github-mark-white.png"
@@ -33,29 +37,121 @@ root.resizable(width=False, height=False)
 
 # https://github.com/Akascape/CTkMenuBar
 menu_bar_bg = CONST_MENUBAR_BACKGROUND_COLOR_DARK
-menu_bar_text_color = CONST_MENUBAR_TEXT_COLOR_DARK
-menu_bar_hover_color = CONST_MENUBAR_HOVER_COLOR_DARK
-toolbar = CTkMenuBar(master=root, bg_color=menu_bar_bg, border_width=1)
+menu_bar_text_color = CONST_TEXT_COLOR_DARK
+menu_bar_hover_color = CONST_HOVER_COLOR_DARK
+
+toolbar = CTkMenuBar(master=root, bg_color=menu_bar_bg)
 file_button = toolbar.add_cascade("File", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
 settings_button = toolbar.add_cascade("Settings", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
 about_button = toolbar.add_cascade("About", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
 
+dropdown_bg_color = CONST_DROPDOWN_BACKGROUND_COLOR_DARK
+dropdown_text_color = CONST_TEXT_COLOR_DARK
+dropdown_hover_color = CONST_HOVER_COLOR_DARK
+
 # File Button Functions
-file_button_dropdown = CustomDropdownMenu(widget=file_button, corner_radius=5)
+file_button_dropdown = CustomDropdownMenu(widget=file_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
 file_button_dropdown.add_option(option="Import")
 file_button_dropdown.add_option(option="Export")
 file_button_dropdown.add_option(option="Exit", command=root.destroy)
+
+# Settings Button Functions
+def load_images(text, mode):
+    match text:
+        case "Source Code":
+            if mode == "Light":
+                return ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_LIGHT_PATH))
+            else:
+                return ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_DARK_PATH))
+
+def updated_dropdown(mode, widget, original_dropdown, bg_color, text_color, hover_color):
+    new_dropdown = CustomDropdownMenu(
+        widget=widget,
+        corner_radius=0,
+        bg_color=bg_color,
+        text_color=text_color,
+        hover_color=hover_color
+    )
+
+    for option in original_dropdown._options_list:
+        if isinstance(option, dropdown_menu._CDMSubmenuButton):
+            submenu_copy = new_dropdown.add_submenu(option.cget("text"), bg_color=bg_color)
+            for sub_option in option.submenu._options_list:
+                image = None
+
+                if hasattr(sub_option, '_image') and sub_option._image is not None:
+                    image = load_images(option.cget("text"), mode)
+                    
+                submenu_copy.add_option(
+                    option=sub_option.cget("text"),
+                    image = image,
+                    command=sub_option._command
+                )
+        else:
+            image = None
+            
+            if hasattr(option, '_image') and option._image is not None:
+                image = load_images(option.cget("text"), mode)
+
+            new_dropdown.add_option(
+                option=option.cget("text"),
+                image = image,
+                command=option._command
+            )
+
+    return new_dropdown
+
+def load_light_mode():
+    global file_button_dropdown, settings_button_dropdown, about_button_dropdown
+
+    root._set_appearance_mode("light")
+
+    toolbar.configure(bg_color=CONST_MENUBAR_BACKGROUND_COLOR_LIGHT)
+    file_button.configure(text_color=CONST_TEXT_COLOR_LIGHT, hover_color=CONST_HOVER_COLOR_LIGHT)
+    settings_button.configure(text_color=CONST_TEXT_COLOR_LIGHT, hover_color=CONST_HOVER_COLOR_LIGHT)
+    about_button.configure(text_color=CONST_TEXT_COLOR_LIGHT, hover_color=CONST_HOVER_COLOR_LIGHT)
+
+    file_button_dropdown = updated_dropdown("Light", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+
+    settings_button_dropdown = updated_dropdown("Light", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+
+    about_button_dropdown = updated_dropdown("Light", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+
+def load_dark_mode():
+    global file_button_dropdown, settings_button_dropdown, about_button_dropdown
+    
+    root._set_appearance_mode("dark")
+
+    toolbar.configure(bg_color=CONST_MENUBAR_BACKGROUND_COLOR_DARK)
+    file_button.configure(text_color=CONST_TEXT_COLOR_DARK, hover_color=CONST_HOVER_COLOR_DARK)
+    settings_button.configure(text_color=CONST_TEXT_COLOR_DARK, hover_color=CONST_HOVER_COLOR_DARK)
+    about_button.configure(text_color=CONST_TEXT_COLOR_DARK, hover_color=CONST_HOVER_COLOR_DARK)
+
+    file_button_dropdown = updated_dropdown("Dark", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+
+    settings_button_dropdown = updated_dropdown("Dark", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+
+    about_button_dropdown = updated_dropdown("Dark", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+
+settings_button_dropdown = CustomDropdownMenu(widget=settings_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
+appearance_sub_menu = settings_button_dropdown.add_submenu("Appearance")
+appearance_sub_menu.add_option(option="Light", command=load_light_mode)
+appearance_sub_menu.add_option(option="Dark", command= load_dark_mode)
+appearance_sub_menu.add_option(option="System")
 
 # About Button Functions
 def open_browser():
     webbrowser.open_new(CONST_SOURCE_CODE_URL)
 
 image = ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_DARK_PATH)) 
-about_button_dropdown = CustomDropdownMenu(widget=about_button, corner_radius=5)
+about_button_dropdown = CustomDropdownMenu(widget=about_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
 about_button_dropdown.add_option(option="Source Code", image=image, command=open_browser)
 
 # TODO: Button to change appearance mode (começar em system, deixar mudar para dark ou light)
-# window._set_appearance_mode("dark")
+# root._set_appearance_mode("dark")
+
+# Load from settings
+# ...
 
 root.mainloop()
 

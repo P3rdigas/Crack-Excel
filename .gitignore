@@ -11,3 +11,6 @@ comparations
 
 # Ignores photoshop files
 *.psd
+
+# Ignores INI files
+*.ini

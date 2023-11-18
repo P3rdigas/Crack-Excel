@@ -1,6 +1,7 @@
 import os
 import sys
 import webbrowser
+import configparser
 from PIL import Image
 from CTkMenuBar import *
 import customtkinter as ctk
@@ -36,18 +37,70 @@ root.geometry("800x600")
 root.resizable(width=False, height=False)
 
 # https://github.com/Akascape/CTkMenuBar
-menu_bar_bg = CONST_MENUBAR_BACKGROUND_COLOR_DARK
-menu_bar_text_color = CONST_TEXT_COLOR_DARK
-menu_bar_hover_color = CONST_HOVER_COLOR_DARK
+menu_bar_bg = None
+menu_bar_text_color = None
+menu_bar_hover_color = None
+dropdown_bg_color = None
+dropdown_text_color = None
+dropdown_hover_color = None
+
+def load_init_light_mode():
+    global menu_bar_bg, menu_bar_text_color, menu_bar_hover_color, dropdown_bg_color, dropdown_text_color, dropdown_hover_color
+
+    menu_bar_bg = CONST_MENUBAR_BACKGROUND_COLOR_LIGHT
+    menu_bar_text_color = CONST_TEXT_COLOR_LIGHT
+    menu_bar_hover_color = CONST_HOVER_COLOR_LIGHT
+    dropdown_bg_color = CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT
+    dropdown_text_color = CONST_TEXT_COLOR_LIGHT
+    dropdown_hover_color = CONST_HOVER_COLOR_LIGHT
+
+def load_init_dark_mode():
+    global menu_bar_bg, menu_bar_text_color, menu_bar_hover_color, dropdown_bg_color, dropdown_text_color, dropdown_hover_color
+
+    menu_bar_bg = CONST_MENUBAR_BACKGROUND_COLOR_DARK
+    menu_bar_text_color = CONST_TEXT_COLOR_DARK
+    menu_bar_hover_color = CONST_HOVER_COLOR_DARK
+    dropdown_bg_color = CONST_DROPDOWN_BACKGROUND_COLOR_DARK
+    dropdown_text_color = CONST_TEXT_COLOR_DARK
+    dropdown_hover_color = CONST_HOVER_COLOR_DARK
+
+def load_init_system_mode():
+    root._set_appearance_mode("system")
+    appearance_mode = root._get_appearance_mode()
+
+    if appearance_mode == "light":
+        load_init_light_mode()
+    else:
+        load_init_dark_mode()
+
+# Loading config file
+config_file = 'config.ini'
+
+config = configparser.ConfigParser()
+
+if os.path.isfile(config_file):
+    config.read(config_file)
+    theme = config.get('Settings', 'theme')
+
+    if theme == "system":
+        load_init_system_mode()
+    elif theme == "light":
+        root._set_appearance_mode("light")
+        load_init_light_mode()
+    else:
+        root._set_appearance_mode("dark")
+        load_init_dark_mode()
+else:
+    config['Settings'] = {'theme': 'system'}
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+    
+    load_init_system_mode()
 
 toolbar = CTkMenuBar(master=root, bg_color=menu_bar_bg)
 file_button = toolbar.add_cascade("File", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
 settings_button = toolbar.add_cascade("Settings", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
 about_button = toolbar.add_cascade("About", text_color=menu_bar_text_color, hover_color=menu_bar_hover_color)
-
-dropdown_bg_color = CONST_DROPDOWN_BACKGROUND_COLOR_DARK
-dropdown_text_color = CONST_TEXT_COLOR_DARK
-dropdown_hover_color = CONST_HOVER_COLOR_DARK
 
 # File Button Functions
 file_button_dropdown = CustomDropdownMenu(widget=file_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
@@ -59,7 +112,7 @@ file_button_dropdown.add_option(option="Exit", command=root.destroy)
 def load_images(text, mode):
     match text:
         case "Source Code":
-            if mode == "Light":
+            if mode == "light":
                 return ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_LIGHT_PATH))
             else:
                 return ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_DARK_PATH))
@@ -101,7 +154,7 @@ def updated_dropdown(mode, widget, original_dropdown, bg_color, text_color, hove
 
     return new_dropdown
 
-def load_light_mode():
+def configure_light_mode():
     global file_button_dropdown, settings_button_dropdown, about_button_dropdown
 
     root._set_appearance_mode("light")
@@ -111,13 +164,21 @@ def load_light_mode():
     settings_button.configure(text_color=CONST_TEXT_COLOR_LIGHT, hover_color=CONST_HOVER_COLOR_LIGHT)
     about_button.configure(text_color=CONST_TEXT_COLOR_LIGHT, hover_color=CONST_HOVER_COLOR_LIGHT)
 
-    file_button_dropdown = updated_dropdown("Light", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+    file_button_dropdown = updated_dropdown("light", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
 
-    settings_button_dropdown = updated_dropdown("Light", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+    settings_button_dropdown = updated_dropdown("light", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
 
-    about_button_dropdown = updated_dropdown("Light", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
+    about_button_dropdown = updated_dropdown("light", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_LIGHT, CONST_TEXT_COLOR_LIGHT, CONST_HOVER_COLOR_LIGHT)
 
-def load_dark_mode():
+def load_light_mode():
+    configure_light_mode()
+    
+    config.set('Settings', 'theme', 'light')
+
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+
+def configure_dark_mode():
     global file_button_dropdown, settings_button_dropdown, about_button_dropdown
     
     root._set_appearance_mode("dark")
@@ -127,17 +188,45 @@ def load_dark_mode():
     settings_button.configure(text_color=CONST_TEXT_COLOR_DARK, hover_color=CONST_HOVER_COLOR_DARK)
     about_button.configure(text_color=CONST_TEXT_COLOR_DARK, hover_color=CONST_HOVER_COLOR_DARK)
 
-    file_button_dropdown = updated_dropdown("Dark", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+    file_button_dropdown = updated_dropdown("dark", file_button, file_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
 
-    settings_button_dropdown = updated_dropdown("Dark", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+    settings_button_dropdown = updated_dropdown("dark", settings_button, settings_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
 
-    about_button_dropdown = updated_dropdown("Dark", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+    about_button_dropdown = updated_dropdown("dark", about_button, about_button_dropdown, CONST_DROPDOWN_BACKGROUND_COLOR_DARK, CONST_TEXT_COLOR_DARK, CONST_HOVER_COLOR_DARK)
+
+def load_dark_mode():
+    configure_dark_mode()
+
+    config.set('Settings', 'theme', 'dark')
+
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+
+def load_system_mode():
+    try:
+        root._set_appearance_mode("system")
+        
+        #appearance_mode = root._get_appearance_mode()
+
+        #print(appearance_mode)
+
+        # if appearance_mode == "light":
+        #     configure_light_mode()
+        # else:
+        #     configure_dark_mode()
+
+        config.set('Settings', 'theme', 'system')
+
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 settings_button_dropdown = CustomDropdownMenu(widget=settings_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
 appearance_sub_menu = settings_button_dropdown.add_submenu("Appearance")
 appearance_sub_menu.add_option(option="Light", command=load_light_mode)
 appearance_sub_menu.add_option(option="Dark", command= load_dark_mode)
-appearance_sub_menu.add_option(option="System")
+appearance_sub_menu.add_option(option="System", command=load_system_mode)
 
 # About Button Functions
 def open_browser():
@@ -146,12 +235,6 @@ def open_browser():
 image = ctk.CTkImage(Image.open(CONST_GITHUB_LOGO_DARK_PATH)) 
 about_button_dropdown = CustomDropdownMenu(widget=about_button, corner_radius=0, bg_color=dropdown_bg_color, text_color=dropdown_text_color, hover_color=dropdown_hover_color)
 about_button_dropdown.add_option(option="Source Code", image=image, command=open_browser)
-
-# TODO: Button to change appearance mode (começar em system, deixar mudar para dark ou light)
-# root._set_appearance_mode("dark")
-
-# Load from settings
-# ...
 
 root.mainloop()
 

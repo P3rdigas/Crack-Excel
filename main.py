@@ -18,15 +18,15 @@ class CrackExcel(customtkinter.CTk):
     HOVER_COLOR_LIGHT = "light gray"
     HOVER_COLOR_DARK = "grey25"
 
-    GITHUB_LOGO_LIGHT_PATH = r"assets/icons/github-mark.png"
-    GITHUB_LOGO_DARK_PATH = r"assets/icons/github-mark-white.png"
+    GITHUB_LOGO_LIGHT_PATH = os.path.join("assets", "icons", "github-mark.png")
+    GITHUB_LOGO_DARK_PATH = os.path.join("assets", "icons", "github-mark-white.png")
 
     SOURCE_CODE_URL = "https://github.com/P3rdigas/Crack-Excel"
 
     def __init__(self):
         super().__init__()
 
-        # configure window
+        # Configure window
         self.title("Crack Excel")
         self.iconbitmap('assets/logos/cracked_excel_logo_128x128.ico')
         self.geometry(f"{800}x{600}")
@@ -43,27 +43,8 @@ class CrackExcel(customtkinter.CTk):
 
         # Loading config file
         self.config_file = 'config.ini'
-
         self.config = configparser.ConfigParser()
-
-        if os.path.isfile(self.config_file):
-            self.config.read(self.config_file)
-            theme = self.config.get('Settings', 'theme')
-
-            if theme == "system":
-                self.load_init_system_mode()
-            elif theme == "light":
-                customtkinter.set_appearance_mode("light")
-                self.load_init_light_mode()
-            else:
-                customtkinter.set_appearance_mode("dark")
-                self.load_init_dark_mode()
-        else:
-            self.config['Settings'] = {'theme': 'system'}
-            with open(self.config_file, 'w') as configfile:
-                self.config.write(configfile)
-            
-            self.load_init_system_mode()
+        self.load_configuration()        
 
         self.toolbar = CTkMenuBar(master=self, bg_color=self.menu_bar_bg)
         self.file_button = self.toolbar.add_cascade("File", text_color=self.menu_bar_text_color, hover_color=self.menu_bar_hover_color)
@@ -83,6 +64,26 @@ class CrackExcel(customtkinter.CTk):
 
         self.about_button_dropdown = CustomDropdownMenu(widget=self.about_button, corner_radius=0, bg_color=self.dropdown_bg_color, text_color=self.dropdown_text_color, hover_color=self.dropdown_hover_color)
         self.about_button_dropdown.add_option(option="Source Code", image=self.github_image, command=self.open_browser)
+
+    def load_configuration(self):
+        if os.path.isfile(self.config_file):
+            self.config.read(self.config_file)
+            theme = self.config.get('Settings', 'theme')
+
+            if theme == "system":
+                self.load_init_system_mode()
+            elif theme == "light":
+                customtkinter.set_appearance_mode("light")
+                self.load_init_light_mode()
+            else:
+                customtkinter.set_appearance_mode("dark")
+                self.load_init_dark_mode()
+        else:
+            self.config['Settings'] = {'theme': 'system'}
+            with open(self.config_file, 'w') as configfile:
+                self.config.write(configfile)
+            
+            self.load_init_system_mode()
     
     def load_init_light_mode(self):
         self.menu_bar_bg = self.MENUBAR_BACKGROUND_COLOR_LIGHT

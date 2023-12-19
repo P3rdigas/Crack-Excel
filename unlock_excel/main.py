@@ -46,6 +46,7 @@ class CrackExcel(customtkinter.CTk):
         self.config = configparser.ConfigParser()
         self.load_configuration()        
 
+        # Set Menubar
         self.toolbar = CTkMenuBar(master=self, bg_color=self.menu_bar_bg)
         self.file_button = self.toolbar.add_cascade("File", text_color=self.menu_bar_text_color, hover_color=self.menu_bar_hover_color)
         self.settings_button = self.toolbar.add_cascade("Settings", text_color=self.menu_bar_text_color, hover_color=self.menu_bar_hover_color)
@@ -64,6 +65,31 @@ class CrackExcel(customtkinter.CTk):
 
         self.about_button_dropdown = CustomDropdownMenu(widget=self.about_button, corner_radius=0, bg_color=self.dropdown_bg_color, text_color=self.dropdown_text_color, hover_color=self.dropdown_hover_color)
         self.about_button_dropdown.add_option(option="Source Code", image=self.github_image, command=self.open_browser)
+
+        left_width = int(self.winfo_screenwidth() * 0.3)
+        right_width = int(self.winfo_screenwidth() * 0.7)
+
+        # Create Drag & Dropx
+        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="blue", width=left_width)
+        controls_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="red")
+        add_file_button = customtkinter.CTkButton(controls_frame, text="Add file")
+        delete_file_button = customtkinter.CTkButton(controls_frame, text="Delete file")
+        clear_button = customtkinter.CTkButton(controls_frame, text="Clear List")
+        area_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="yellow")
+
+        # Create Execution Frame
+        execution_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="green", width=right_width)
+
+        # Drag & Drop Layout
+        clear_button.pack(side="right")
+        delete_file_button.pack(side="right")
+        add_file_button.pack(side="right")
+        controls_frame.pack(fill="x")
+        area_frame.pack(expand=True, fill="both")
+        drag_and_drop_frame.pack(side="left", expand=True, fill="both") 
+
+        # Execution Frame Layout
+        execution_frame.pack(side="left", expand=True, fill="both")
 
     def load_configuration(self):
         if os.path.isfile(self.config_file):

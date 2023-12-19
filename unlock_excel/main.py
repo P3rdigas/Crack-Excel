@@ -18,8 +18,8 @@ class CrackExcel(customtkinter.CTk):
     HOVER_COLOR_LIGHT = "light gray"
     HOVER_COLOR_DARK = "grey25"
 
-    GITHUB_LOGO_LIGHT_PATH = os.path.join("assets", "icons", "github-mark.png")
-    GITHUB_LOGO_DARK_PATH = os.path.join("assets", "icons", "github-mark-white.png")
+    GITHUB_LOGO_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark.png')
+    GITHUB_LOGO_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark-white.png')
 
     SOURCE_CODE_URL = "https://github.com/P3rdigas/Crack-Excel"
 
@@ -28,7 +28,7 @@ class CrackExcel(customtkinter.CTk):
 
         # Configure window
         self.title("Crack Excel")
-        self.iconbitmap('assets/logos/cracked_excel_logo_128x128.ico')
+        self.iconbitmap(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/logos/cracked_excel_logo_128x128.ico'))
         self.geometry(f"{800}x{600}")
         self.resizable(width=False, height=False)
 
@@ -42,7 +42,7 @@ class CrackExcel(customtkinter.CTk):
         self.github_image = customtkinter.CTkImage(light_image=Image.open(self.GITHUB_LOGO_LIGHT_PATH), dark_image=Image.open(self.GITHUB_LOGO_DARK_PATH))
 
         # Loading config file
-        self.config_file = 'config.ini'
+        self.config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
         self.config = configparser.ConfigParser()
         self.load_configuration()        
 

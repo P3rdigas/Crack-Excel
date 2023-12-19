@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "unlock-excel"
+version = "1.0.0"
+description = "Crack Excel files with forgotten passwords"
+authors = ["P3rdigas <pr.perdigao@campus.fct.unl.pt>"]
+license = "LICENSE"
+readme = "README.md"
+packages = [{include = "unlock_excel"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+customtkinter = "^5.2.1"
+pillow = "^10.1.0"
+lxml = "^4.9.3"
+packaging = "^23.2"
+ctkmenubar = {git = "https://github.com/P3rdigas/CTkMenuBar-Poetry.git"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+unlock-excel = "unlock_excel.main:main"

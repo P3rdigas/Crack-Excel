@@ -20,6 +20,25 @@ reference = "HEAD"
 resolved_reference = "3acc4ef07414d0f34aec3433a24f7fa223b53734"
 
 [[package]]
+name = "ctktooltip"
+version = "0.1.0"
+description = "Small pop-up widget for displaying details inside customtkinter."
+optional = false
+python-versions = "^3.12"
+files = []
+develop = false
+
+[package.dependencies]
+customtkinter = "^5.2.1"
+packaging = "^23.2"
+
+[package.source]
+type = "git"
+url = "https://github.com/P3rdigas/CTkToolTip-Poetry.git"
+reference = "HEAD"
+resolved_reference = "ce8b96d8ca0a4e4d3a962eb735721fc521b540d9"
+
+[[package]]
 name = "customtkinter"
 version = "5.2.1"
 description = "Create modern looking GUIs with Python"
@@ -235,4 +254,4 @@ tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "pa
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "1ad43aa97ed3f7c251bb62847c0efdff9b74010f39b0b4be7f97e4a1bc112e12"
+content-hash = "be76fdd57194c03dceceb5c1663935f84cb88ac40d28ad8268106605c708eaea"

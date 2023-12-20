@@ -22,11 +22,11 @@ class CrackExcel(customtkinter.CTk):
     GITHUB_LOGO_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark.png')
     GITHUB_LOGO_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark-white.png')
     ADD_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file.png')
-    ADD_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file.png')
+    ADD_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file-white.png')
     DELETE_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/document.png')
-    DELETE_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/document.png')
+    DELETE_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/document-white.png')
     CLEAR_FILES_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/broom.png')
-    CLEAR_FILES_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/broom.png')
+    CLEAR_FILES_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/broom-white.png')
 
     SOURCE_CODE_URL = "https://github.com/P3rdigas/Crack-Excel"
 
@@ -70,7 +70,7 @@ class CrackExcel(customtkinter.CTk):
         right_width = int(self.winfo_screenwidth() * 0.7)
 
         # Create Drag & Dropx
-        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, width=left_width, fg_color="blue")
+        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, width=left_width)
 
         controls_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
 
@@ -95,10 +95,10 @@ class CrackExcel(customtkinter.CTk):
 
         clear_button.bind("<Enter>", lambda event: self.on_enter(event, clear_files_tooltip))
 
-        area_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="yellow")
+        area_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
 
         # Create Execution Frame
-        execution_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="green", width=right_width)
+        execution_frame = customtkinter.CTkFrame(self, corner_radius=0, width=right_width)
 
         # Drag & Drop Layout
         clear_button.pack(side="right", padx=1)

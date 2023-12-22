@@ -14,7 +14,7 @@ pillow = "^10.1.0"
 lxml = "^4.9.3"
 packaging = "^23.2"
 ctkmenubar = {git = "https://github.com/P3rdigas/CTkMenuBar-Poetry.git"}
-ctktooltip = {git = "https://github.com/P3rdigas/CTkToolTip-Poetry.git"}
+ctktooltip = {git = "https://github.com/P3rdigas/CTkToolTip-Poetry.git", rev = "poetry"}
 
 
 [build-system]

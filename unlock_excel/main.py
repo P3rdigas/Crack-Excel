@@ -7,6 +7,9 @@ from CTkMenuBar import *
 from CTkToolTip import *
 
 class CrackExcel(customtkinter.CTk):
+    APP_WIDTH = 800
+    APP_HEIGHT = 600
+
     # Python colors: https://matplotlib.org/stable/gallery/color/named_colors.html or https://www.discogcodingacademy.com/turtle-colours
     MENUBAR_BACKGROUND_COLOR_LIGHT = "white"
     MENUBAR_BACKGROUND_COLOR_DARK = "black"
@@ -14,19 +17,22 @@ class CrackExcel(customtkinter.CTk):
     DROPDOWN_BACKGROUND_COLOR_LIGHT = "white"
     DROPDOWN_BACKGROUND_COLOR_DARK = "grey20"
 
+    DRAG_AND_DROP_BG_COLOR_LIGHT = "grey95"
+    DRAG_AND_DROP_BG_COLOR_DARK = "grey15"
+    DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT = "grey90"
+    DRAG_AND_DROP_SEPARATOR_COLOR_DARK = "black"
+
     TEXT_COLOR_LIGHT = "black"
     TEXT_COLOR_DARK = "white"
-    HOVER_COLOR_LIGHT = "light gray"
+    HOVER_COLOR_LIGHT = "grey85"
     HOVER_COLOR_DARK = "grey25"
 
     GITHUB_LOGO_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark.png')
     GITHUB_LOGO_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark-white.png')
     ADD_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file.png')
     ADD_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file-white.png')
-    DELETE_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/document.png')
-    DELETE_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/document-white.png')
-    CLEAR_FILES_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/broom.png')
-    CLEAR_FILES_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/broom-white.png')
+    DELETE_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/delete-file.png')
+    DELETE_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/delete-file-white.png')
 
     SOURCE_CODE_URL = "https://github.com/P3rdigas/Crack-Excel"
 
@@ -36,7 +42,7 @@ class CrackExcel(customtkinter.CTk):
         # Configure window
         self.title("Crack Excel")
         self.iconbitmap(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/logos/cracked_excel_logo_128x128.ico'))
-        self.geometry(f"{800}x{600}")
+        self.geometry(f"{self.APP_WIDTH}x{self.APP_HEIGHT}")
         self.resizable(width=False, height=False)
 
         self.github_image = customtkinter.CTkImage(light_image=Image.open(self.GITHUB_LOGO_LIGHT_PATH), dark_image=Image.open(self.GITHUB_LOGO_DARK_PATH))
@@ -66,47 +72,51 @@ class CrackExcel(customtkinter.CTk):
         self.about_button_dropdown = CustomDropdownMenu(widget=self.about_button, corner_radius=0, bg_color=(self.DROPDOWN_BACKGROUND_COLOR_LIGHT, self.DROPDOWN_BACKGROUND_COLOR_DARK), text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
         self.about_button_dropdown.add_option(option="Source Code", image=self.github_image, command=self.open_browser)
 
-        left_width = int(self.winfo_screenwidth() * 0.3)
-        right_width = int(self.winfo_screenwidth() * 0.7)
+        left_width = int(self.APP_WIDTH * 0.3)
+        right_width = self.APP_WIDTH - left_width
 
-        # Create Drag & Dropx
-        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, width=left_width)
+        # Create Drag & Drop Frame
+        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, width=left_width, fg_color=(self.DRAG_AND_DROP_BG_COLOR_LIGHT, self.DRAG_AND_DROP_BG_COLOR_DARK))
 
         controls_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
 
         add_file_image = customtkinter.CTkImage(light_image=Image.open(self.ADD_FILE_LIGHT_PATH), dark_image=Image.open(self.ADD_FILE_DARK_PATH))
-        add_file_button = customtkinter.CTkButton(controls_frame, image=add_file_image, text="", width=32, height=32, fg_color="transparent")
+        add_file_button = customtkinter.CTkButton(controls_frame, image=add_file_image, text="", width=32, height=32, fg_color="transparent", hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
 
-        add_file_tooltip = CTkToolTip(add_file_button, message="Add file", corner_radius=5, delay=0)
+        add_file_tooltip = CTkToolTip(add_file_button, message="Add file", corner_radius=5, border_width=1, border_color=("black", "white"))
     
         add_file_button.bind("<Enter>", lambda event: self.on_enter(event, add_file_tooltip))
 
         delete_file_image = customtkinter.CTkImage(light_image=Image.open(self.DELETE_FILE_LIGHT_PATH), dark_image=Image.open(self.DELETE_FILE_DARK_PATH))
-        delete_file_button = customtkinter.CTkButton(controls_frame, image=delete_file_image, text="", width=32, height=32, fg_color="transparent")
+        delete_file_button = customtkinter.CTkButton(controls_frame, image=delete_file_image, text="", width=32, height=32, fg_color="transparent", hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
 
-        delete_file_tooltip = CTkToolTip(delete_file_button, message="Delete file", corner_radius=5, delay=0)
+        delete_file_tooltip = CTkToolTip(delete_file_button, message="Delete file", corner_radius=5, border_width=1, border_color=("black", "white"))
 
         delete_file_button.bind("<Enter>", lambda event: self.on_enter(event, delete_file_tooltip))
 
-        clear_files_image = customtkinter.CTkImage(light_image=Image.open(self.CLEAR_FILES_LIGHT_PATH), dark_image=Image.open(self.CLEAR_FILES_DARK_PATH))
-        clear_button = customtkinter.CTkButton(controls_frame, image=clear_files_image, text="", width=32, height=32, fg_color="transparent", hover_color=("yellow", "blue"))
+        controls_label = customtkinter.CTkLabel(controls_frame, text="Drag & Drop")
 
-        clear_files_tooltip = CTkToolTip(clear_button, message="Clear files", corner_radius=5, delay=0)
-
-        clear_button.bind("<Enter>", lambda event: self.on_enter(event, clear_files_tooltip))
+        drag_and_drop_separator = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, width=left_width, height=1, fg_color=(self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT, self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK), border_width=1)
 
         area_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
+
+        # Create Separator Frame for Drag & Drop Frame and Execution Frame
+        separator = customtkinter.CTkFrame(self, corner_radius=0, width=1, fg_color=(self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT, self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK), border_width=1)
 
         # Create Execution Frame
         execution_frame = customtkinter.CTkFrame(self, corner_radius=0, width=right_width)
 
         # Drag & Drop Layout
-        clear_button.pack(side="right", padx=1)
+        controls_label.pack(side="left", padx=10)
         delete_file_button.pack(side="right", padx=1)
         add_file_button.pack(side="right", padx=1)
         controls_frame.pack(fill="x")
+        drag_and_drop_separator.pack(fill="x")
         area_frame.pack(expand=True, fill="both")
-        drag_and_drop_frame.pack(side="left", expand=True, fill="both") 
+        drag_and_drop_frame.pack(side="left", expand=True, fill="both")
+
+        # Separator Layout
+        separator.pack(side="left", fill="y")
 
         # Execution Frame Layout
         execution_frame.pack(side="left", expand=True, fill="both")
@@ -149,10 +159,7 @@ def main():
     #   - Example : "Icon made by Pixel perfect from www.flaticon.com"
     #   - Icon made by https://www.flaticon.com/authors/pixel-perfect from http://www.flaticon.com/
     #   - Icon made by https://www.flaticon.com/authors/freepik from http://www.flaticon.com/
-    #   - Icon made by https://www.flaticon.com/authors/gajah-mada from http://www.flaticon.com/
     #   - Icon made by https://www.flaticon.com/authors/ivan-abirawa from http://www.flaticon.com/
-    #   - Icon made by https://www.flaticon.com/authors/lafs from http://www.flaticon.com/
-    
     app.mainloop()
 
     # if len(sys.argv) != 2:

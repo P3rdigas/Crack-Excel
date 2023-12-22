@@ -1,10 +1,12 @@
+import configparser
 import os
 import webbrowser
-import configparser
+
 import customtkinter
-from PIL import Image
 from CTkMenuBar import *
 from CTkToolTip import *
+from PIL import Image
+
 
 class CrackExcel(customtkinter.CTk):
     APP_WIDTH = 800
@@ -27,12 +29,24 @@ class CrackExcel(customtkinter.CTk):
     HOVER_COLOR_LIGHT = "grey85"
     HOVER_COLOR_DARK = "grey25"
 
-    GITHUB_LOGO_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark.png')
-    GITHUB_LOGO_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/github-mark-white.png')
-    ADD_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file.png')
-    ADD_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/add-file-white.png')
-    DELETE_FILE_LIGHT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/delete-file.png')
-    DELETE_FILE_DARK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/icons/delete-file-white.png')
+    GITHUB_LOGO_LIGHT_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/github-mark.png"
+    )
+    GITHUB_LOGO_DARK_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/github-mark-white.png"
+    )
+    ADD_FILE_LIGHT_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/add-file.png"
+    )
+    ADD_FILE_DARK_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/add-file-white.png"
+    )
+    DELETE_FILE_LIGHT_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/delete-file.png"
+    )
+    DELETE_FILE_DARK_PATH = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "assets/icons/delete-file-white.png"
+    )
 
     SOURCE_CODE_URL = "https://github.com/P3rdigas/Crack-Excel"
 
@@ -41,70 +55,204 @@ class CrackExcel(customtkinter.CTk):
 
         # Configure window
         self.title("Crack Excel")
-        self.iconbitmap(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/logos/cracked_excel_logo_128x128.ico'))
+        self.iconbitmap(
+            os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "assets/logos/cracked_excel_logo_128x128.ico",
+            )
+        )
         self.geometry(f"{self.APP_WIDTH}x{self.APP_HEIGHT}")
         self.resizable(width=False, height=False)
 
-        self.github_image = customtkinter.CTkImage(light_image=Image.open(self.GITHUB_LOGO_LIGHT_PATH), dark_image=Image.open(self.GITHUB_LOGO_DARK_PATH))
+        self.github_image = customtkinter.CTkImage(
+            light_image=Image.open(self.GITHUB_LOGO_LIGHT_PATH),
+            dark_image=Image.open(self.GITHUB_LOGO_DARK_PATH),
+        )
 
         # Loading config file
-        self.config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
+        self.config_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "config.ini"
+        )
         self.config = configparser.ConfigParser()
-        self.load_configuration()        
+        self.load_configuration()
 
         # Set Menubar
-        self.toolbar = CTkMenuBar(master=self, bg_color=(self.MENUBAR_BACKGROUND_COLOR_LIGHT, self.MENUBAR_BACKGROUND_COLOR_DARK))
-        self.file_button = self.toolbar.add_cascade("File", text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
-        self.settings_button = self.toolbar.add_cascade("Settings", text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
-        self.about_button = self.toolbar.add_cascade("About", text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
+        self.toolbar = CTkMenuBar(
+            master=self,
+            bg_color=(
+                self.MENUBAR_BACKGROUND_COLOR_LIGHT,
+                self.MENUBAR_BACKGROUND_COLOR_DARK,
+            ),
+        )
+        self.file_button = self.toolbar.add_cascade(
+            "File",
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
+        self.settings_button = self.toolbar.add_cascade(
+            "Settings",
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
+        self.about_button = self.toolbar.add_cascade(
+            "About",
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
 
-        self.file_button_dropdown = CustomDropdownMenu(widget=self.file_button, corner_radius=0, bg_color=(self.DROPDOWN_BACKGROUND_COLOR_LIGHT, self.DROPDOWN_BACKGROUND_COLOR_DARK), text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
+        self.file_button_dropdown = CustomDropdownMenu(
+            widget=self.file_button,
+            corner_radius=0,
+            bg_color=(
+                self.DROPDOWN_BACKGROUND_COLOR_LIGHT,
+                self.DROPDOWN_BACKGROUND_COLOR_DARK,
+            ),
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
         self.file_button_dropdown.add_option(option="Import")
         self.file_button_dropdown.add_option(option="Export")
         self.file_button_dropdown.add_option(option="Exit", command=self.destroy)
 
-        self.settings_button_dropdown = CustomDropdownMenu(widget=self.settings_button, corner_radius=0, bg_color=(self.DROPDOWN_BACKGROUND_COLOR_LIGHT, self.DROPDOWN_BACKGROUND_COLOR_DARK), text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
+        self.settings_button_dropdown = CustomDropdownMenu(
+            widget=self.settings_button,
+            corner_radius=0,
+            bg_color=(
+                self.DROPDOWN_BACKGROUND_COLOR_LIGHT,
+                self.DROPDOWN_BACKGROUND_COLOR_DARK,
+            ),
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
         appearance_sub_menu = self.settings_button_dropdown.add_submenu("Appearance")
-        appearance_sub_menu.add_option(option="Light", command=lambda:self.change_appearance_mode_event("light"))
-        appearance_sub_menu.add_option(option="Dark", command=lambda:self.change_appearance_mode_event("dark"))
-        appearance_sub_menu.add_option(option="System", command=lambda:self.change_appearance_mode_event("system"))
+        appearance_sub_menu.add_option(
+            option="Light", command=lambda: self.change_appearance_mode_event("light")
+        )
+        appearance_sub_menu.add_option(
+            option="Dark", command=lambda: self.change_appearance_mode_event("dark")
+        )
+        appearance_sub_menu.add_option(
+            option="System", command=lambda: self.change_appearance_mode_event("system")
+        )
 
-        self.about_button_dropdown = CustomDropdownMenu(widget=self.about_button, corner_radius=0, bg_color=(self.DROPDOWN_BACKGROUND_COLOR_LIGHT, self.DROPDOWN_BACKGROUND_COLOR_DARK), text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK), hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
-        self.about_button_dropdown.add_option(option="Source Code", image=self.github_image, command=self.open_browser)
+        self.about_button_dropdown = CustomDropdownMenu(
+            widget=self.about_button,
+            corner_radius=0,
+            bg_color=(
+                self.DROPDOWN_BACKGROUND_COLOR_LIGHT,
+                self.DROPDOWN_BACKGROUND_COLOR_DARK,
+            ),
+            text_color=(self.TEXT_COLOR_LIGHT, self.TEXT_COLOR_DARK),
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
+        self.about_button_dropdown.add_option(
+            option="Source Code", image=self.github_image, command=self.open_browser
+        )
 
         left_width = int(self.APP_WIDTH * 0.3)
         right_width = self.APP_WIDTH - left_width
 
         # Create Drag & Drop Frame
-        drag_and_drop_frame = customtkinter.CTkFrame(self, corner_radius=0, width=left_width, fg_color=(self.DRAG_AND_DROP_BG_COLOR_LIGHT, self.DRAG_AND_DROP_BG_COLOR_DARK))
+        drag_and_drop_frame = customtkinter.CTkFrame(
+            self,
+            corner_radius=0,
+            width=left_width,
+            fg_color=(
+                self.DRAG_AND_DROP_BG_COLOR_LIGHT,
+                self.DRAG_AND_DROP_BG_COLOR_DARK,
+            ),
+        )
 
-        controls_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
+        controls_frame = customtkinter.CTkFrame(
+            drag_and_drop_frame, corner_radius=0, fg_color="transparent"
+        )
 
-        add_file_image = customtkinter.CTkImage(light_image=Image.open(self.ADD_FILE_LIGHT_PATH), dark_image=Image.open(self.ADD_FILE_DARK_PATH))
-        add_file_button = customtkinter.CTkButton(controls_frame, image=add_file_image, text="", width=32, height=32, fg_color="transparent", hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
+        add_file_image = customtkinter.CTkImage(
+            light_image=Image.open(self.ADD_FILE_LIGHT_PATH),
+            dark_image=Image.open(self.ADD_FILE_DARK_PATH),
+        )
+        add_file_button = customtkinter.CTkButton(
+            controls_frame,
+            image=add_file_image,
+            text="",
+            width=32,
+            height=32,
+            fg_color="transparent",
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
 
-        add_file_tooltip = CTkToolTip(add_file_button, message="Add file", corner_radius=5, border_width=1, border_color=("black", "white"))
-    
-        add_file_button.bind("<Enter>", lambda event: self.on_enter(event, add_file_tooltip))
+        add_file_tooltip = CTkToolTip(
+            add_file_button,
+            message="Add file",
+            corner_radius=5,
+            border_width=1,
+            border_color=("black", "white"),
+        )
 
-        delete_file_image = customtkinter.CTkImage(light_image=Image.open(self.DELETE_FILE_LIGHT_PATH), dark_image=Image.open(self.DELETE_FILE_DARK_PATH))
-        delete_file_button = customtkinter.CTkButton(controls_frame, image=delete_file_image, text="", width=32, height=32, fg_color="transparent", hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK))
+        add_file_button.bind(
+            "<Enter>", lambda event: self.on_enter(event, add_file_tooltip)
+        )
 
-        delete_file_tooltip = CTkToolTip(delete_file_button, message="Delete file", corner_radius=5, border_width=1, border_color=("black", "white"))
+        delete_file_image = customtkinter.CTkImage(
+            light_image=Image.open(self.DELETE_FILE_LIGHT_PATH),
+            dark_image=Image.open(self.DELETE_FILE_DARK_PATH),
+        )
+        delete_file_button = customtkinter.CTkButton(
+            controls_frame,
+            image=delete_file_image,
+            text="",
+            width=32,
+            height=32,
+            fg_color="transparent",
+            hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+        )
 
-        delete_file_button.bind("<Enter>", lambda event: self.on_enter(event, delete_file_tooltip))
+        delete_file_tooltip = CTkToolTip(
+            delete_file_button,
+            message="Delete file",
+            corner_radius=5,
+            border_width=1,
+            border_color=("black", "white"),
+        )
+
+        delete_file_button.bind(
+            "<Enter>", lambda event: self.on_enter(event, delete_file_tooltip)
+        )
 
         controls_label = customtkinter.CTkLabel(controls_frame, text="Drag & Drop")
 
-        drag_and_drop_separator = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, width=left_width, height=1, fg_color=(self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT, self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK), border_width=1)
+        drag_and_drop_separator = customtkinter.CTkFrame(
+            drag_and_drop_frame,
+            corner_radius=0,
+            width=left_width,
+            height=1,
+            fg_color=(
+                self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT,
+                self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK,
+            ),
+            border_width=1,
+        )
 
-        area_frame = customtkinter.CTkFrame(drag_and_drop_frame, corner_radius=0, fg_color="transparent")
+        area_frame = customtkinter.CTkFrame(
+            drag_and_drop_frame, corner_radius=0, fg_color="transparent"
+        )
 
         # Create Separator Frame for Drag & Drop Frame and Execution Frame
-        separator = customtkinter.CTkFrame(self, corner_radius=0, width=1, fg_color=(self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT, self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK), border_width=1)
+        separator = customtkinter.CTkFrame(
+            self,
+            corner_radius=0,
+            width=1,
+            fg_color=(
+                self.DRAG_AND_DROP_SEPARATOR_COLOR_LIGHT,
+                self.DRAG_AND_DROP_SEPARATOR_COLOR_DARK,
+            ),
+            border_width=1,
+        )
 
         # Create Execution Frame
-        execution_frame = customtkinter.CTkFrame(self, corner_radius=0, width=right_width)
+        execution_frame = customtkinter.CTkFrame(
+            self, corner_radius=0, width=right_width
+        )
 
         # Drag & Drop Layout
         controls_label.pack(side="left", padx=10)
@@ -124,7 +272,7 @@ class CrackExcel(customtkinter.CTk):
     def load_configuration(self):
         if os.path.isfile(self.config_file):
             self.config.read(self.config_file)
-            theme = self.config.get('Settings', 'theme')
+            theme = self.config.get("Settings", "theme")
 
             if theme == "system":
                 customtkinter.set_appearance_mode("system")
@@ -133,16 +281,16 @@ class CrackExcel(customtkinter.CTk):
             else:
                 customtkinter.set_appearance_mode("dark")
         else:
-            self.config['Settings'] = {'theme': 'system'}
-            with open(self.config_file, 'w') as configfile:
+            self.config["Settings"] = {"theme": "system"}
+            with open(self.config_file, "w") as configfile:
                 self.config.write(configfile)
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-        self.config.set('Settings', 'theme', new_appearance_mode)
+        self.config.set("Settings", "theme", new_appearance_mode)
 
-        with open(self.config_file, 'w') as configfile:
+        with open(self.config_file, "w") as configfile:
             self.config.write(configfile)
 
     def open_browser(self):
@@ -150,6 +298,7 @@ class CrackExcel(customtkinter.CTk):
 
     def on_enter(self, event, tooltip):
         tooltip.get()
+
 
 def main():
     app = CrackExcel()
@@ -190,6 +339,7 @@ def main():
     #         create_unprotected_file(cracked_zip_file, excel_name, excel_extension)
     #     case _:
     #         print("This file is not supported yet. Files supported .xlxs and .xlsm")
+
 
 if __name__ == "__main__":
     main()

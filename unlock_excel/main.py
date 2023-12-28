@@ -1,6 +1,7 @@
 import configparser
 import os
 import webbrowser
+from tkinter import filedialog
 
 import customtkinter
 from CTkMenuBar import *
@@ -171,6 +172,9 @@ class CrackExcel(customtkinter.CTk):
             light_image=Image.open(self.ADD_FILE_LIGHT_PATH),
             dark_image=Image.open(self.ADD_FILE_DARK_PATH),
         )
+
+        self.selected_files = set()
+
         add_file_button = customtkinter.CTkButton(
             controls_frame,
             image=add_file_image,
@@ -179,6 +183,7 @@ class CrackExcel(customtkinter.CTk):
             height=32,
             fg_color="transparent",
             hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+            command=self.open_file_explorer,
         )
 
         add_file_tooltip = CTkToolTip(
@@ -221,6 +226,7 @@ class CrackExcel(customtkinter.CTk):
 
         controls_label = customtkinter.CTkLabel(controls_frame, text="Drag & Drop")
 
+        # TODO: Add support for drag and drop
         drag_and_drop_separator = customtkinter.CTkFrame(
             drag_and_drop_frame,
             corner_radius=0,
@@ -298,6 +304,16 @@ class CrackExcel(customtkinter.CTk):
 
     def on_enter(self, event, tooltip):
         tooltip.get()
+
+    def open_file_explorer(self):
+        files = filedialog.askopenfiles(filetypes=[("Excel files", "*.xlsx;*.xlsm")])
+
+        if files:
+            for file in files:
+                file_path = file.name
+                if file_path not in self.selected_files:
+                    self.selected_files.add(file_path)
+                    # file_listbox.insert(tk.END, file_path)
 
 
 def main():

@@ -14,3 +14,6 @@ comparations
 
 # Ignores INI files
 *.ini
+
+# Ignores test files
+*test*

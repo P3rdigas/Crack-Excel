@@ -4,6 +4,7 @@ import webbrowser
 from tkinter import filedialog
 
 import customtkinter
+from CTkListbox import *
 from CTkMenuBar import *
 from CTkToolTip import *
 from PIL import Image
@@ -173,7 +174,7 @@ class CrackExcel(customtkinter.CTk):
             dark_image=Image.open(self.ADD_FILE_DARK_PATH),
         )
 
-        self.selected_files = set()
+        self.imported_files = set()
 
         add_file_button = customtkinter.CTkButton(
             controls_frame,
@@ -239,8 +240,8 @@ class CrackExcel(customtkinter.CTk):
             border_width=1,
         )
 
-        area_frame = customtkinter.CTkFrame(
-            drag_and_drop_frame, corner_radius=0, fg_color="transparent"
+        self.files_listbox = CTkListbox(
+            drag_and_drop_frame, border_width=0, justify="left"
         )
 
         # Create Separator Frame for Drag & Drop Frame and Execution Frame
@@ -266,7 +267,7 @@ class CrackExcel(customtkinter.CTk):
         add_file_button.pack(side="right", padx=1)
         controls_frame.pack(fill="x")
         drag_and_drop_separator.pack(fill="x")
-        area_frame.pack(expand=True, fill="both")
+        self.files_listbox.pack(expand=True, fill="both")
         drag_and_drop_frame.pack(side="left", expand=True, fill="both")
 
         # Separator Layout
@@ -311,9 +312,10 @@ class CrackExcel(customtkinter.CTk):
         if files:
             for file in files:
                 file_path = file.name
-                if file_path not in self.selected_files:
-                    self.selected_files.add(file_path)
-                    # file_listbox.insert(tk.END, file_path)
+                if file_path not in self.imported_files:
+                    self.imported_files.add(file_path)
+                    filename = os.path.basename(file_path)
+                    self.files_listbox.insert("END", filename, text_anchor="w")
 
 
 def main():

@@ -9,12 +9,13 @@ packages = [{include = "unlock_excel"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-customtkinter = "^5.2.1"
 pillow = "^10.1.0"
 lxml = "^4.9.3"
 packaging = "^23.2"
 ctkmenubar = {git = "https://github.com/P3rdigas/CTkMenuBar-Poetry.git"}
 ctktooltip = {git = "https://github.com/P3rdigas/CTkToolTip-Poetry.git", rev = "poetry"}
+ctklistbox = "^1.1"
+customtkinter = {git = "https://github.com/P3rdigas/CustomTkinter.git"}
 
 
 [build-system]

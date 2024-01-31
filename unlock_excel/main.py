@@ -211,6 +211,7 @@ class CrackExcel(customtkinter.CTk):
             height=32,
             fg_color="transparent",
             hover_color=(self.HOVER_COLOR_LIGHT, self.HOVER_COLOR_DARK),
+            command=self.delete_files,
         )
 
         delete_file_tooltip = CTkToolTip(
@@ -241,7 +242,10 @@ class CrackExcel(customtkinter.CTk):
         )
 
         self.files_listbox = CTkListbox(
-            drag_and_drop_frame, border_width=0, justify="left"
+            drag_and_drop_frame,
+            border_width=0,
+            justify="left",
+            multiple_selection=False,
         )
 
         # Create Separator Frame for Drag & Drop Frame and Execution Frame
@@ -315,7 +319,22 @@ class CrackExcel(customtkinter.CTk):
                 if file_path not in self.imported_files:
                     self.imported_files.add(file_path)
                     filename = os.path.basename(file_path)
-                    self.files_listbox.insert("END", filename, text_anchor="w")
+                    button = self.files_listbox.insert("END", filename, text_anchor="w")
+
+                    file_tooltip = CTkToolTip(
+                        button,
+                        message=filename,
+                        corner_radius=5,
+                        border_width=1,
+                        border_color=("black", "white"),
+                    )
+
+                    button.bind(
+                        "<Enter>", lambda event: self.on_enter(event, file_tooltip)
+                    )
+
+    def delete_files(self):
+        self.files_listbox.configure(multiple_selection=True)
 
 
 def main():

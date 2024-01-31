@@ -2,13 +2,13 @@
 
 [[package]]
 name = "ctklistbox"
-version = "1.1"
+version = "1.2"
 description = "Customtkinter Listbox widget"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "CTkListbox-1.1-py3-none-any.whl", hash = "sha256:86251b0b483fc35bbb99ce532ea9f8660b2b3a60e2396f1cbebb4430a26d9052"},
-    {file = "CTkListbox-1.1.tar.gz", hash = "sha256:99d1e8c033faabba848d064ddd38248895809d5f6088ea3e56bd254a6d1de595"},
+    {file = "CTkListbox-1.2-py3-none-any.whl", hash = "sha256:7ade315cc76c48015851f57bd43116a19ac6a2db2a04d651e10c691ba55b45d0"},
+    {file = "CTkListbox-1.2.tar.gz", hash = "sha256:b5c5d53570d7eb408e8799930e56b21cc014c4cb403c32686993a2610e21b47d"},
 ]
 
 [package.dependencies]
@@ -273,4 +273,4 @@ tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "pa
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "5b383be80ebe7ec8b24a6f83e66f575be2ef7e1251b4229b755ce1a544358ae5"
+content-hash = "8cf3d6ac5599f6104f41d127cece11755e2f9d7633d18eb8ed50c6e7674e44ec"
